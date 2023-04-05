@@ -56,7 +56,7 @@ class Ui_EffectOptionsTab:
 
     @staticmethod
     def infoAlert():
-        ui.notify(message='Color effect applied.', position='bottom', type='positive')
+        ui.notify(message='Color effect applied.', type='positive')
 
     @staticmethod
     def getEffectProps(effect):

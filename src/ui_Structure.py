@@ -57,19 +57,18 @@ class Ui_Structure:
                                 ui.button('Language', on_click=dialog.open).props('icon=language').style('margin-top: 5%;')
                                 with ui.dialog().props('persistent') as dialog, ui.card():
                                     ui.label(text='Appearance:')
-                                    ui.select(['Light mode', 'Dark mode'], value='Light mode')
+                                    ui.select({1: 'Light mode', 2: 'Dark mode'}, value=2, on_change=lambda e: self.toggleDarkMode(e.value))
                                     ui.button(text='Close', on_click=dialog.close)
                                 ui.button(text='Appearance', on_click=dialog.open).props('icon=dark_mode')
                                 with ui.dialog().props('persistent') as dialog, ui.card():
                                     ui.input(label='IP address')
                                     ui.input(label='auth_token', password=True, password_toggle_button=True)
-                                    ui.button(text='Identify', on_click=None)
+                                    ui.button(text='Identify', on_click=self.lightController.identify())
                                     ui.button(text='Close', on_click=dialog.close)
                                 ui.button(text='Developer options', on_click=dialog.open).props('icon=build color=red').style('margin-top: 15%;')
         self.editPalette.addColor()
         ui.colors(primary='#6400ff')    # green: #58b947
-        # ui.add_head_html('<style>body{background-color: #212121;}</style>')
-        ui.run(title='Lightning control for Nanoleaf - by Robin Schäfer', favicon='https://play-lh.googleusercontent.com/2WXa6Cwbvfrd6R1vvByeoQD5qa7zOr8g33vwxL-aPPRd9cIxZWNDqfUJQcRToz6A9Q', show=False)
+        ui.run(title='Lightning control for Nanoleaf - by Robin Schäfer', favicon='https://play-lh.googleusercontent.com/2WXa6Cwbvfrd6R1vvByeoQD5qa7zOr8g33vwxL-aPPRd9cIxZWNDqfUJQcRToz6A9Q', show=False, dark=True)
 
     def loadPalettes(self):
         ui.add_head_html('''<style>.palette:hover{border: 4px solid #000; box-sizing: border-box;}</style>''')
@@ -109,3 +108,11 @@ class Ui_Structure:
         self.editPalette.clear(True)
         for l in range(95, 4, -10):
             self.editPalette.addColor(colorConverter.HSLtoHEX(h, s, l), False)
+
+    @staticmethod
+    def toggleDarkMode(newValue):
+        darkMode = True
+        if newValue == 1:
+            darkMode = False
+        ui.run(dark=darkMode)
+        ui.notify(message='Press F5 to apply', type='info')

@@ -16,12 +16,13 @@ class Ui_Structure:
         self.effectFactory = None
         self.editPalette = None
         self.lightController = light
+        self.currentPaletteId = 0
         with ui.row().style('width: 100%; display: flex;justify-content: space-between;align-items: flex-start;'):
             with ui.expansion(text='Colors', icon='palette').style('width: 30%;position: sticky;top: 0;'):
                 pass
                 with ui.tabs() as tabs:
                     ui.tab(name='Edit pallete', icon='brush')
-                    ui.tab(name='Choose pallete', icon='table_rows')
+                    ui.tab(name='Choose pallete', icon='table_rows').on('click', lambda: ui.open(f'#{self.currentPaletteId + 50}'))     # + 50, to skip every html element with an id which is not a color palette
                 with ui.tab_panels(tabs=tabs, value='Choose pallete'):
                     with ui.tab_panel(name='Edit pallete'):
                         self.loadPaletteEditor()
@@ -68,14 +69,14 @@ class Ui_Structure:
                                     ui.button(text='Close', on_click=dialog.close)
                                 ui.button(text='Developer options', on_click=dialog.open).props('icon=build color=red').style('margin-top: 15%;')
         self.editPalette.addColor()
-        ui.colors(primary='#6400ff')    # green: #58b947
+        ui.colors(primary='#6400ff')    # Nanoleaf green: #58b947
         ui.run(title='Lightning control for Nanoleaf - by Robin Schäfer', favicon='https://play-lh.googleusercontent.com/2WXa6Cwbvfrd6R1vvByeoQD5qa7zOr8g33vwxL-aPPRd9cIxZWNDqfUJQcRToz6A9Q', show=False, dark=True)
 
     def loadPalettes(self):
         ui.add_head_html('''<style>.palette:hover{border: 4px solid #000; box-sizing: border-box;}</style>''')
         with ui.element('div').style('overflow:auto; height:80vh;padding: 20px;'):
-            for palette in palettes:
-                Ui_Palette(palette, self.editPalette)
+            for id, palette in enumerate(palettes):
+                Ui_Palette(palette, id, self.editPalette, self)
 
     def loadPaletteEditor(self):
         self.effectFactory = EffectFactory(self.lightController, self.eventHandler)

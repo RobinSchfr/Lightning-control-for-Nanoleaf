@@ -58,6 +58,7 @@ class Ui_Structure:
                                 with ui.dialog().props('persistent') as dialog, ui.card():
                                     ui.label(text='Appearance:')
                                     ui.select({1: 'Light mode', 2: 'Dark mode'}, value=2, on_change=lambda e: self.toggleDarkMode(e.value))
+                                    ui.color_input(label='Accent color', value='#6400ff', on_change=lambda e: ui.colors(primary=e.value))
                                     ui.button(text='Close', on_click=dialog.close)
                                 ui.button(text='Appearance', on_click=dialog.open).props('icon=dark_mode')
                                 with ui.dialog().props('persistent') as dialog, ui.card():

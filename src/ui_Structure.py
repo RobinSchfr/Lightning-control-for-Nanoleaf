@@ -73,8 +73,9 @@ class Ui_Structure:
 
     def loadPalettes(self):
         ui.add_head_html('''<style>.palette:hover{border: 4px solid #000; box-sizing: border-box;}</style>''')
-        for palette in palettes:
-            Ui_Palette(palette, self.editPalette)
+        with ui.element('div').style('overflow:auto; height:80vh;padding: 20px;'):
+            for palette in palettes:
+                Ui_Palette(palette, self.editPalette)
 
     def loadPaletteEditor(self):
         self.effectFactory = EffectFactory(self.lightController, self.eventHandler)

@@ -8,7 +8,6 @@ class LightController:
     def __init__(self):
         self.ip = credentials.ip
         self.auth_token = credentials.auth_token
-        self.url = 'http://' + self.ip + ':16021/api/v1/' + self.auth_token
         self.nl = Nanoleaf(self.ip, self.auth_token)
 
     def setBrightness(self, value):
@@ -24,7 +23,7 @@ class LightController:
         self.nl.set_color(colorConverter.HEXtoRGB(color))
 
     def setEffect(self, effect):
-        requests.put(self.url + "/effects", data=effect)
+        requests.put(self.nl.url + "/effects", data=effect)
 
     def identify(self):
         self.nl.identify()

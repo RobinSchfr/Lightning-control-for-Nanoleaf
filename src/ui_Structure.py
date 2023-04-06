@@ -101,21 +101,20 @@ class Ui_Structure:
             checkbox2 = ui.checkbox(text='Create color shades').style('margin-top: 5%').tooltip(text='Creates 10 shades of a specific color')
             colorInput2 = ui.color_input(label='Color', value='#000000', on_change=None).bind_visibility_from(checkbox2, 'value').props('color=black')
             ui.button(on_click=lambda e: self.createShades(colorInput2.value)).props('icon=add').tooltip('Create palette').bind_visibility_from(checkbox2, 'value')
-        ui.separator().style('margin-top: 5%')
-        with ui.row().style('margin-top: 5%'):
-            ui.button(text='Update', on_click=lambda: self.editPalette.update()).props('icon=sync')
 
     def createShades(self, color):
         h, s, l = colorConverter.HEXtoHSL(color)
         self.editPalette.clear(True)
         for l in range(95, 4, -10):
             self.editPalette.addColor(colorConverter.HSLtoHEX(h, s, l), False)
+        self.editPalette.update()
 
     def changeSecondaryColor(self, state, color='#000000'):
         if state:
             self.effectFactory.secondaryColor = color
         else:
             self.effectFactory.secondaryColor = None
+        self.editPalette.update()
 
     async def toggleDarkMode(self):
         if self.darkMode:

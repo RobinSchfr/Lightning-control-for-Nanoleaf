@@ -11,7 +11,7 @@ class Ui_EditPalette:
     def addColor(self, color='#000000', updateEffect=True):
         if len(self.colorButtons) < 10:
             with self.container:
-                cb = Ui_ColorButton(color, self.effectFactory)
+                cb = Ui_ColorButton(color, self)
                 self.colorButtons.append(cb)
             if updateEffect:
                 self.effectFactory.colorPalette = self.getColorPalette()
@@ -55,7 +55,7 @@ class Ui_EditPalette:
         self.clear(True)
         for color in colors:
             with self.container:
-                cb = Ui_ColorButton(color.colorCode, self.effectFactory)
+                cb = Ui_ColorButton(color.colorCode, self)
                 self.colorButtons.append(cb)
 
     def loadPalette(self, palette):
@@ -66,8 +66,8 @@ class Ui_EditPalette:
         self.effectFactory.buildEffect()
 
     def update(self):
-        self.shiftLeft(False)
-        self.shiftRight()
+        self.effectFactory.colorPalette = self.getColorPalette()
+        self.effectFactory.buildEffect()
 
     def getColorPalette(self):
         colorPalette = []

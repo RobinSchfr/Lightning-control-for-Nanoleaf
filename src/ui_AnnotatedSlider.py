@@ -1,5 +1,5 @@
-from typing import Optional
 from nicegui import ui
+from typing import Optional
 from ui_Widget import Ui_Widget
 
 

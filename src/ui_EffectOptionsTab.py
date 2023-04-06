@@ -1,8 +1,8 @@
+from effectList import effects
 from nicegui import ui
-from ui_DoubleSlider import Ui_DoubleSlider
 from ui_AnnotatedSlider import Ui_AnnotatedSlider
 from ui_AnnotatedToggle import Ui_AnnotatedToggle
-from effectList import effects
+from ui_DoubleSlider import Ui_DoubleSlider
 
 
 class Ui_EffectOptionsTab:

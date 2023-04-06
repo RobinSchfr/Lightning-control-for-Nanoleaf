@@ -1,5 +1,5 @@
-from typing import Any, Dict, List, Union
 from nicegui import ui
+from typing import Any, Dict, List, Union
 from ui_Widget import Ui_Widget
 
 

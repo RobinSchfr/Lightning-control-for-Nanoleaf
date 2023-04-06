@@ -1,5 +1,5 @@
-from ui_Structure import Ui_Structure
 from lightController import LightController
+from ui_Structure import Ui_Structure
 
 
 light = LightController()

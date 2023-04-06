@@ -1,5 +1,5 @@
-from nicegui import ui
 from effectList import effects
+from nicegui import ui
 from ui_EffectButton import Ui_EffectButton
 
 

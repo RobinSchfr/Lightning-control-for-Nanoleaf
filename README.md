@@ -42,16 +42,59 @@ In the user interface (powered by Nicegui) you have the agony of choice about 10
 	- rearrange the order of the colors
 - create 10 color shades based on one color with one click
 
-## Setup
+## Setup guide
+> ### Hints
+> - When you are using the command line make sure that you are in the correct directory (change directory with `cd <dir>`)
+> - The client which runs the app has to be in the same network as the Nanoleafs
+
+### I. Installation
+#### 1. Install Python
+Get it from the [official homepage](https://www.python.org/downloads/)
+
+#### 2. Download the repository
+*manually*
+
+or with
+
+```bash 
+git clone https://github.com/RobinSchfr/Lightning-control-for-Nanoleaf.git
+```
+
+#### 3. Install all dependencies
+```bash
+pip install -r requirements.txt
+```
+### II. Device setup
+#### 1. Get the IP address of your device
+```bash
+python tools/findNewDevice.py
+```
+If this script does not work, you have to look up manually in your router interface.
+
+#### 2. Create a new authentication token for your device
+```bash
+python tools/createAuthToken.py
+```
+
+#### 3. Rename the file `.env.template` to `.env` and update the placeholders with the actual values
+
+### III. Usage
+#### 1. Launch the app
+```bash
+python src/main.py
+```
+The app is now available through http://127.0.0.1:8080/ in your browser.
 
 ## Compatibility
 The software especially the unit which creates the effects is only tested on *Nanoleaf Shapes*. 
 It might not work properly on *Nanoleaf Lines*, *Nanoleaf Canvas* or *Nanoleaf Light Panels*.
 
 ## Roadmap
-- [ ] feature to "add secondary color" to a palette
+- [x] feature "create color Shades"
+- [x] feature "add secondary color" to a palette
 - [ ] Refactoring for better readability of the codebase
 - [ ] embed the tools into the ui
+- [ ] create executable with pyInstaller (first beta release)
 - [ ] option to save color palettes
 - [ ] shortcuts for color + effect combinations
 - [ ] schedule: change palette/effect automatically after specific amount of time
@@ -62,3 +105,7 @@ It might not work properly on *Nanoleaf Lines*, *Nanoleaf Canvas* or *Nanoleaf L
 ## Special thanks to the creators of
 - [nicegui](https://github.com/zauberzeug/nicegui)
 - [1000 color palettes](https://github.com/Jam3/nice-color-palettes/blob/master/1000.json)
+
+## Contributing
+Feel free to contribute something! 
+This is my first *real* open source project.

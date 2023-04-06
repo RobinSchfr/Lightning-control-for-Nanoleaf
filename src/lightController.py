@@ -1,13 +1,15 @@
+from dotenv import load_dotenv
 from nanoleafapi import *
 import colorConverter
+import os
 import requests
-import credentials
 
 
 class LightController:
     def __init__(self):
-        self.ip = credentials.ip
-        self.auth_token = credentials.auth_token
+        load_dotenv()
+        self.ip = os.getenv('IP')
+        self.auth_token = os.getenv('AUTH_TOKEN')
         self.nl = Nanoleaf(self.ip, self.auth_token)
 
     def setBrightness(self, value):

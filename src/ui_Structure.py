@@ -1,13 +1,13 @@
-from nicegui import ui
 from colors_1000 import palettes
-from ui_AnnotatedSlider import Ui_AnnotatedSlider
-from ui_Palette import Ui_Palette
-from ui_EditPalette import Ui_EditPalette
-import colorConverter
 from effectFactory import EffectFactory
+from eventHandler import EventHandler
+from nicegui import ui
+from ui_AnnotatedSlider import Ui_AnnotatedSlider
+from ui_EditPalette import Ui_EditPalette
 from ui_EffectButtons import Ui_EffectButtons
 from ui_EffectOptionsTab import Ui_EffectOptionsTab
-from eventHandler import EventHandler
+from ui_Palette import Ui_Palette
+import colorConverter
 
 
 class Ui_Structure:
@@ -71,7 +71,7 @@ class Ui_Structure:
                                 ui.button(text='Developer options', on_click=dialog.open).props('icon=build color=red').style('margin-top: 15%;')
         self.editPalette.addColor()
         ui.colors(primary='#6400ff')    # Nanoleaf green: #58b947
-        ui.run(title='Lightning control for Nanoleaf - by Robin Schäfer', favicon='https://play-lh.googleusercontent.com/2WXa6Cwbvfrd6R1vvByeoQD5qa7zOr8g33vwxL-aPPRd9cIxZWNDqfUJQcRToz6A9Q', show=False, dark=self.darkMode)
+        ui.run(title='Lightning control for Nanoleaf - by Robin Schäfer', favicon='https://play-lh.googleusercontent.com/2WXa6Cwbvfrd6R1vvByeoQD5qa7zOr8g33vwxL-aPPRd9cIxZWNDqfUJQcRToz6A9Q', reload=False, dark=self.darkMode)
 
     def loadPalettes(self):
         ui.add_head_html('''<style>.palette:hover{border: 4px solid #000; box-sizing: border-box;}</style>''')
@@ -95,8 +95,8 @@ class Ui_Structure:
             ui.button(on_click=lambda: None).props('icon=favorite').tooltip('Save this palette to favorites')
         ui.separator().style('margin-top: 5%')
         with ui.column():
-            checkbox = ui.checkbox(text='Add secondary color (50% ratio)').style('margin-top: 5%').tooltip(text='After each color of the palette the secondary color will be added')
-            colorInput = ui.color_input(label='Secondary color', value='#000000', on_change=None).bind_visibility_from(checkbox, 'value').props('color=black')
+            checkbox = ui.checkbox(text='Add secondary color (50% ratio)', on_change=lambda e: self.changeSecondaryColor(e.value)).style('margin-top: 5%').tooltip(text='After each color of the palette the secondary color will be added')
+            ui.color_input(label='Secondary color', value='#000000', on_change=lambda e: self.changeSecondaryColor(True, e.value)).bind_visibility_from(checkbox, 'value').props('color=black')
         with ui.column():
             checkbox2 = ui.checkbox(text='Create color shades').style('margin-top: 5%').tooltip(text='Creates 10 shades of a specific color')
             colorInput2 = ui.color_input(label='Color', value='#000000', on_change=None).bind_visibility_from(checkbox2, 'value').props('color=black')
@@ -110,6 +110,12 @@ class Ui_Structure:
         self.editPalette.clear(True)
         for l in range(95, 4, -10):
             self.editPalette.addColor(colorConverter.HSLtoHEX(h, s, l), False)
+
+    def changeSecondaryColor(self, state, color='#000000'):
+        if state:
+            self.effectFactory.secondaryColor = color
+        else:
+            self.effectFactory.secondaryColor = None
 
     async def toggleDarkMode(self):
         if self.darkMode:

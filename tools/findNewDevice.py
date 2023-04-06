@@ -3,7 +3,7 @@ import socket
 
 
 def getIPFromDevice():
-    print('\n[INFO] This may take up to 2 minutes.')
+    print('\n[INFO] Please wait. This may take up to 2 minutes.')
     localIP = socket.gethostbyname(socket.gethostname())
     localIP = localIP[:localIP.rfind('.') - len(localIP) + 1]
     for i in range(255):

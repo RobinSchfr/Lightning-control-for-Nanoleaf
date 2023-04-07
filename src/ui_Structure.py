@@ -63,6 +63,7 @@ class Ui_Structure:
                                     ui.color_input(label='Accent color', value='#6400ff', on_change=lambda e: ui.colors(primary=e.value))
                                     ui.button(text='Close', on_click=dialog.close)
                                 ui.button(text='Appearance', on_click=dialog.open).props('icon=dark_mode')
+                                ui.link(text='GitHub', target='https://github.com/RobinSchfr/Lightning-control-for-Nanoleaf', new_tab=True)
                                 with ui.dialog().props('persistent') as dialog, ui.card():
                                     ui.input(label='IP address')
                                     ui.input(label='auth_token', password=True, password_toggle_button=True)

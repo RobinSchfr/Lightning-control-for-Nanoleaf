@@ -108,6 +108,6 @@ It might not work properly on *Nanoleaf Lines*, *Nanoleaf Canvas* or *Nanoleaf L
 - [1000 color palettes](https://github.com/Jam3/nice-color-palettes/blob/master/1000.json)
 
 ## Contributing
-Feel free to contribute something!
-
-This is my first *real* open source project.
+Feel free to contribute something! 
+This is my first *real* open source project. 
+Looking forward to get some feedback!

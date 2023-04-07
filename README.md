@@ -23,10 +23,10 @@ In the user interface (powered by Nicegui) you have the agony of choice about 10
 ## Screenshots
 
 ### Light mode
-![](https://user-images.githubusercontent.com/79405000/230383078-c3a35f4e-b010-4109-8c5e-0e3eece81128.png)
+![](media/screenshot_light.png)
 
 ### Dark mode
-![](https://user-images.githubusercontent.com/79405000/230383091-8f09a295-5314-45ed-882d-e9796b519c2a.png)
+![](media/screenshot_dark.png)
 
 ## Features
 - easy-to-use, well structured, great usability

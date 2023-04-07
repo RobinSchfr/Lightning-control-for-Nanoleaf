@@ -48,41 +48,47 @@ In the user interface (powered by Nicegui) you have the agony of choice about 10
 - The client which runs the app has to be in the same network as the Nanoleafs
 
 ### I. Installation
-#### 1. Install Python
+1. Install Python
 Get it from the [official homepage](https://www.python.org/downloads/)
 
-#### 2. Download the repository
-*manually*
+2. Download the repository
 
-or with
+	*manually*
 
-```bash 
-git clone https://github.com/RobinSchfr/Lightning-control-for-Nanoleaf.git
-```
+	or with
 
-#### 3. Install all dependencies
-```bash
-pip install -r requirements.txt
-```
+	```bash 
+	git clone https://github.com/RobinSchfr/Lightning-control-for-Nanoleaf.git
+	```
+
+3. Install all dependencies
+
+	```bash
+	pip install -r requirements.txt
+	```
+	
 ### II. Device setup
-#### 1. Get the IP address of your device
-```bash
-python tools/findNewDevice.py
-```
-If this script does not work, you have to look up manually in your router interface.
+1. Get the IP address of your device
 
-#### 2. Create a new authentication token for your device
-```bash
-python tools/createAuthToken.py
-```
+	```bash
+	python tools/findNewDevice.py
+	```
+	If this script does not work, you have to look up manually in your router interface.
 
-#### 3. Rename the file `.env.template` to `.env` and update the placeholders with the actual values
+2. Create a new authentication token for your device
+	
+	```bash
+	python tools/createAuthToken.py
+	```
+
+3. Rename the file `.env.template` to `.env` and replace the placeholders with the actual values
 
 ### III. Usage
-#### 1. Launch the app
-```bash
-python src/main.py
-```
+1. Launch the app
+
+	```bash
+	python src/main.py
+	```
 The app is now available through http://127.0.0.1:8080/ in your browser.
 
 ## Compatibility

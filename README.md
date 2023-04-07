@@ -43,9 +43,9 @@ In the user interface (powered by Nicegui) you have the agony of choice about 10
 - create 10 color shades based on one color with one click
 
 ## Setup guide
-> ### Hints
-> - When you are using the command line make sure that you are in the correct directory (change directory with `cd <dir>`)
-> - The client which runs the app has to be in the same network as the Nanoleafs
+### Hints
+- When you are using the command line make sure that you are in the correct directory (change directory with `cd <dir>`)
+- The client which runs the app has to be in the same network as the Nanoleafs
 
 ### I. Installation
 #### 1. Install Python
@@ -86,7 +86,8 @@ python src/main.py
 The app is now available through http://127.0.0.1:8080/ in your browser.
 
 ## Compatibility
-The software especially the unit which creates the effects is only tested on *Nanoleaf Shapes*. 
+The software especially the unit which creates the effects is only tested on *Nanoleaf Shapes*.
+
 It might not work properly on *Nanoleaf Lines*, *Nanoleaf Canvas* or *Nanoleaf Light Panels*.
 
 ## Roadmap
@@ -107,5 +108,6 @@ It might not work properly on *Nanoleaf Lines*, *Nanoleaf Canvas* or *Nanoleaf L
 - [1000 color palettes](https://github.com/Jam3/nice-color-palettes/blob/master/1000.json)
 
 ## Contributing
-Feel free to contribute something! 
+Feel free to contribute something!
+
 This is my first *real* open source project.

@@ -49,11 +49,12 @@ In the user interface (powered by Nicegui) you have the agony of choice about 10
 
 ### I. Installation
 1. Install Python
-Get it from the [official homepage](https://www.python.org/downloads/)
+
+ Get it from the [official homepage](https://www.python.org/downloads/)
 
 2. Download the repository
 
-	*manually*
+ *manually*
 
 	or with
 

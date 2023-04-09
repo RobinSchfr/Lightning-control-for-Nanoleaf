@@ -65,13 +65,15 @@ In the user interface (powered by Nicegui) you have the agony of choice about 10
 
 3. Install all dependencies
 
+	Use `pip3` when you are using mac os
 	```bash
 	pip install -r requirements.txt
 	```
 	
 ### II. Device setup
 1. Get the IP address of your device
-
+	
+	Use `python3` when you are using mac os
 	```bash
 	python tools/findNewDevice.py
 	```
@@ -79,6 +81,7 @@ In the user interface (powered by Nicegui) you have the agony of choice about 10
 
 2. Create a new authentication token for your device
 	
+	Use `python3` when you are using mac os
 	```bash
 	python tools/createAuthToken.py
 	```
@@ -87,7 +90,8 @@ In the user interface (powered by Nicegui) you have the agony of choice about 10
 
 ### III. Usage
 1. Launch the app
-
+	
+	Use `python3` when you are using mac os
 	```bash
 	python src/main.py
 	```

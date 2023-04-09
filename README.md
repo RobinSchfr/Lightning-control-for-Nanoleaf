@@ -41,6 +41,7 @@ In the user interface (powered by Nicegui) you have the agony of choice about 10
 	- add/remove specific colors
 	- rearrange the order of the colors
 - create 10 color shades based on one color with one click
+- set a secondary color for a color palette
 
 ## Setup guide
 ### Hints

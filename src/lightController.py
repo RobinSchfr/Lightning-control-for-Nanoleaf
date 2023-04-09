@@ -1,6 +1,6 @@
 from dotenv import load_dotenv
 from nanoleafapi import *
-import src.colorConverter as colorConverter
+import colorConverter
 import os
 import requests
 

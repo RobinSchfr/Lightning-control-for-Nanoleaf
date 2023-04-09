@@ -1,9 +1,14 @@
-from src.lightController import LightController
+from dotenv import load_dotenv
+from nanoleafapi import *
 import json
+import os
 import requests
 
 
-lc = LightController()
+load_dotenv()
+ip = os.getenv('IP')
+auth_token = os.getenv('AUTH_TOKEN')
+nl = Nanoleaf(ip, auth_token)
 
 
 def getAllEffects():
@@ -26,6 +31,6 @@ def getSpecificEffect(effect):
 
 command = getSpecificEffect('Aurora magic')
 commandString = str(command).replace('\'', '\"')
-response = requests.put(lc.nl.url + '/effects', data=commandString)
+response = requests.put(nl.url + '/effects', data=commandString)
 jsonOut = json.loads(response.text)
 print(json.dumps(jsonOut, indent=2))

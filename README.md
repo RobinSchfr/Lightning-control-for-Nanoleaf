@@ -69,33 +69,27 @@ In the user interface (powered by Nicegui) you have the agony of choice about 10
 	```bash
 	pip install -r requirements.txt
 	```
-	
-### II. Device setup
-1. Get the IP address of your device
-	
-	Use `python3` when you are using mac os
-	```bash
-	python tools/findNewDevice.py
-	```
-	If this script does not work, you have to look up manually in your router interface.
 
-2. Create a new authentication token for your device
-	
-	Use `python3` when you are using mac os
-	```bash
-	python tools/createAuthToken.py
-	```
-
-3. Rename the file `.env.template` to `.env` and replace the placeholders with the actual values
-
-### III. Usage
+### II. Usage
 1. Launch the app
 	
 	Use `python3` when you are using mac os
 	```bash
 	python src/main.py
 	```
+
 The app is now available through http://127.0.0.1:8080/ in your browser.
+
+On startup you have to press `F5` once.
+
+2. Device setup
+
+	Go to `Settings` > `System settings` > `Developer options`
+	1. Press `Get IP from device`
+	2. Press `Create token`
+	3. Press `Connect`
+
+Now you are ready to go!
 
 ## Compatibility
 The software especially the unit which creates the effects is only tested on *Nanoleaf Shapes*.
@@ -106,7 +100,7 @@ It might not work properly on *Nanoleaf Lines*, *Nanoleaf Canvas* or *Nanoleaf L
 - [x] feature "create color Shades"
 - [x] feature "add secondary color" to a palette
 - [ ] Refactoring for better readability of the codebase
-- [ ] embed the tools into the ui
+- [x] embed the tools into the ui
 - [ ] create executable with pyInstaller (first beta release)
 - [ ] option to save color palettes
 - [ ] shortcuts for color + effect combinations

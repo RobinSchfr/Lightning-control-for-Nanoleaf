@@ -55,10 +55,6 @@ class Ui_EffectOptionsTab:
         self.info.set_visibility(False)
 
     @staticmethod
-    def infoAlert():
-        ui.notify(message='Color effect applied.', type='positive')
-
-    @staticmethod
     def getEffectProps(effect):
         for key in effects.keys():
             try:

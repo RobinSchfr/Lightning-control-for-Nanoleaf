@@ -1,11 +1,14 @@
 from colors_1000 import palettes
+from deviceInitializer import DeviceInitializer
 from effectFactory import EffectFactory
 from eventHandler import EventHandler
-from nicegui import ui
+from nicegui import ui, app
+from settings import Settings
 from ui_AnnotatedSlider import Ui_AnnotatedSlider
 from ui_EditPalette import Ui_EditPalette
 from ui_EffectButtons import Ui_EffectButtons
 from ui_EffectOptionsTab import Ui_EffectOptionsTab
+from ui_Notifier import Notifier
 from ui_Palette import Ui_Palette
 import colorConverter
 
@@ -16,6 +19,9 @@ class Ui_Structure:
         self.effectFactory = None
         self.editPalette = None
         self.lightController = light
+        self.notifier = Notifier()
+        self.lightController.setNotifier(self.notifier)
+        self.device = DeviceInitializer(self.notifier)
         self.currentPaletteId = 0
         self.darkMode = True
         with ui.row().style('width: 100%; display: flex;justify-content: space-between;align-items: flex-start;'):
@@ -60,19 +66,24 @@ class Ui_Structure:
                                 with ui.dialog().props('persistent') as dialog, ui.card():
                                     ui.label(text='Appearance:')
                                     ui.select({1: 'Light mode', 2: 'Dark mode'}, value=2 if self.darkMode else 1, on_change=self.toggleDarkMode)
-                                    ui.color_input(label='Accent color', value='#6400ff', on_change=lambda e: ui.colors(primary=e.value))
+                                    ui.color_input(label='Accent color', value=Settings.getValue("accent_color"), on_change=lambda e: self.setAccentColor(e.value))
                                     ui.button(text='Close', on_click=dialog.close)
                                 ui.button(text='Appearance', on_click=dialog.open).props('icon=dark_mode')
                                 ui.link(text='GitHub', target='https://github.com/RobinSchfr/Lightning-control-for-Nanoleaf', new_tab=True)
                                 with ui.dialog().props('persistent') as dialog, ui.card():
-                                    ui.input(label='IP address')
-                                    ui.input(label='auth_token', password=True, password_toggle_button=True)
-                                    ui.button(text='Identify', on_click=self.lightController.identify())
+                                    self.ipInput = ui.input(label='IP address')
+                                    self.auth_tokenInput = ui.input(label='auth_token', password=True, password_toggle_button=True)
+                                    ui.button(text='Get IP from device', on_click=self.getIPFromDevice).props('icon=add')
+                                    ui.button(text='Create token', on_click=self.createAuthToken).props('icon=add')
+                                    ui.button(text='Connect', on_click=self.connect).props('icon=link')
+                                    ui.separator().style('margin-top: 5%')
+                                    ui.button(text='Identify', on_click=self.lightController.identify)
                                     ui.button(text='Close', on_click=dialog.close)
                                 ui.button(text='Developer options', on_click=dialog.open).props('icon=build color=red').style('margin-top: 15%;')
         self.editPalette.addColor()
-        ui.colors(primary='#6400ff')    # Nanoleaf green: #58b947
-        ui.run(title='Lightning control for Nanoleaf - by Robin Schäfer', favicon='https://play-lh.googleusercontent.com/2WXa6Cwbvfrd6R1vvByeoQD5qa7zOr8g33vwxL-aPPRd9cIxZWNDqfUJQcRToz6A9Q', reload=False, dark=self.darkMode)
+        self.loadCredentials()
+        app.on_connect(lambda: self.updateColor())
+        ui.run(title='Lightning control for Nanoleaf - by Robin Schäfer', favicon='https://play-lh.googleusercontent.com/2WXa6Cwbvfrd6R1vvByeoQD5qa7zOr8g33vwxL-aPPRd9cIxZWNDqfUJQcRToz6A9Q', reload=False, dark=Settings.getValue("dark_mode"))
 
     def loadPalettes(self):
         ui.add_head_html('''<style>.palette:hover{border: 4px solid #000; box-sizing: border-box;}</style>''')
@@ -96,8 +107,8 @@ class Ui_Structure:
             ui.button(on_click=lambda: None).props('icon=favorite').tooltip('Save this palette to favorites')
         ui.separator().style('margin-top: 5%')
         with ui.column():
-            checkbox = ui.checkbox(text='Add secondary color (50% ratio)', on_change=lambda e: self.changeSecondaryColor(e.value)).style('margin-top: 5%').tooltip(text='After each color of the palette the secondary color will be added')
-            ui.color_input(label='Secondary color', value='#000000', on_change=lambda e: self.changeSecondaryColor(True, e.value)).bind_visibility_from(checkbox, 'value').props('color=black')
+            checkbox = ui.checkbox(text='Add secondary color (50% ratio)', on_change=lambda e: self.setSecondaryColor(e.value)).style('margin-top: 5%').tooltip(text='After each color of the palette the secondary color will be added')
+            ui.color_input(label='Secondary color', value='#000000', on_change=lambda e: self.setSecondaryColor(True, e.value)).bind_visibility_from(checkbox, 'value').props('color=black')
         with ui.column():
             checkbox2 = ui.checkbox(text='Create color shades').style('margin-top: 5%').tooltip(text='Creates 10 shades of a specific color')
             colorInput2 = ui.color_input(label='Color', value='#000000', on_change=None).bind_visibility_from(checkbox2, 'value').props('color=black')
@@ -110,12 +121,45 @@ class Ui_Structure:
             self.editPalette.addColor(colorConverter.HSLtoHEX(h, s, l), False)
         self.editPalette.update()
 
-    def changeSecondaryColor(self, state, color='#000000'):
+    def setSecondaryColor(self, state, color='#000000'):
         if state:
             self.effectFactory.secondaryColor = color
         else:
             self.effectFactory.secondaryColor = None
         self.editPalette.update()
+
+    def getIPFromDevice(self):
+        self.device.getIPFromDevice()
+        self.ipInput.set_value(self.device.ip)
+
+    async def createAuthToken(self):
+        await self.device.createAuthToken()
+        self.auth_tokenInput.set_value(self.device.auth_token)
+
+    def connect(self):
+        try:
+            self.lightController.initialize(self.ipInput.value, self.auth_tokenInput.value)
+        except Exception:
+            self.notifier.notify(message='Can\'t connect.', type='negative')
+        else:
+            Settings.setValue("ip", self.ipInput.value)
+            Settings.setValue("auth_token", self.auth_tokenInput.value)
+            self.notifier.notify(message='Device connected.', type='positive')
+
+    def loadCredentials(self):
+        ip = Settings.getValue("ip")
+        auth_token = Settings.getValue("auth_token")
+        if ip is not None and auth_token is not None:
+            self.ipInput.set_value(ip)
+            self.auth_tokenInput.set_value(auth_token)
+            self.connect()
+
+    def updateColor(self):
+        ui.colors(primary=Settings.getValue("accent_color"))
+
+    def setAccentColor(self, color):
+        Settings.setValue("accent_color", color)
+        ui.colors(primary=color)
 
     async def toggleDarkMode(self):
         if self.darkMode:

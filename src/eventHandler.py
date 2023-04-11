@@ -11,6 +11,3 @@ class EventHandler:
 
     def setEffectFactory(self, effectFactory):
         self.effectFactory = effectFactory
-
-    def infoAlert(self):
-        self.effectOptionsTab.infoAlert()

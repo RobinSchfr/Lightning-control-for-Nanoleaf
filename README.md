@@ -18,7 +18,7 @@ This process takes a lot of time, and you are not able to perform quick adjustme
 
 I have a completely different approach to control the *Nanoleafs*. My idea is to create the effects *live*, *on-the-go*, for that I take advantage of the [Nanoleaf Devices OpenAPI](https://forum.nanoleaf.me/docs) function to display effects temporary on the Panels without saving it as an Effect. 
 
-In the user interface (powered by Nicegui) you have the agony of choice about 1000 popular color palettes. Besides that you have an edit palette where you can adjust the colors and rearrange the order of the colors. You have also access to every Effect including their respective effect options. 
+In the user interface (powered by NiceGUI) you have the agony of choice about 1000 popular color palettes. Besides that you have an edit palette where you can adjust the colors and rearrange the order of the colors. You have also access to every Effect including their respective effect options. 
 
 ## Screenshots
 
@@ -44,10 +44,6 @@ In the user interface (powered by Nicegui) you have the agony of choice about 10
 - set a secondary color for a color palette
 
 ## Setup guide
-### Hints
-- When you are using the command line make sure that you are in the correct directory (change directory with `cd <dir>`)
-- The client which runs the app has to be in the same network as the Nanoleafs
-
 ### I. Installation
 1. Install Python
 
@@ -55,7 +51,7 @@ In the user interface (powered by Nicegui) you have the agony of choice about 10
 
 2. Download the repository
 
-	*manually*
+	*manually* from [here](https://github.com/RobinSchfr/Lightning-control-for-Nanoleaf/archive/refs/heads/master.zip)
 
 	or with
 
@@ -65,31 +61,29 @@ In the user interface (powered by Nicegui) you have the agony of choice about 10
 
 3. Install all dependencies
 
-	Use `pip3` when you are using mac os
+	- Use `pip3` when you are using mac os
 	```bash
 	pip install -r requirements.txt
 	```
 
 ### II. Usage
 1. Launch the app
-	
-	Use `python3` when you are using mac os
+	- Use `python3` when you are using mac os
+	- Make sure that you are in the project directory (change directory with `cd <dir>`)
+    - The client which runs the app has to be in the same network as the Nanoleafs
 	```bash
 	python src/main.py
 	```
 
-The app is now available through http://127.0.0.1:8080/ in your browser.
-
-On startup you have to press `F5` once.
-
+	The app is now available through http://127.0.0.1:8080/ in your browser.
 2. Device setup
 
 	Go to `Settings` > `System settings` > `Developer options`
-	1. Press `Get IP from device`
-	2. Press `Create token`
-	3. Press `Connect`
+	1. Click `Get IP from device`
+	2. Click `Create token`
+	3. Click `Connect`
 
-Now you are ready to go!
+#### Now you are ready to go!
 
 ## Compatibility
 The software especially the unit which creates the effects is only tested on *Nanoleaf Shapes*.
@@ -110,7 +104,7 @@ It might not work properly on *Nanoleaf Lines*, *Nanoleaf Canvas* or *Nanoleaf L
 - [ ] add more languages for the ui
 
 ## Special thanks to the creators of
-- [nicegui](https://github.com/zauberzeug/nicegui)
+- [NiceGUI](https://github.com/zauberzeug/nicegui)
 - [1000 color palettes](https://github.com/Jam3/nice-color-palettes/blob/master/1000.json)
 
 ## Contributing

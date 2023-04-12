@@ -15,3 +15,12 @@ class Settings:
         with open('../settings.json', 'r') as settingsFile:
             settings = json.load(settingsFile)
         return settings[key]
+
+    @staticmethod
+    def createSettingsFile():
+        try:
+            Settings.getValue("ip")
+        except FileNotFoundError:
+            settings = {"ip": None, "auth_token": None, "dark_mode": True, "accent_color": "#4500db", "language": "english"}
+            with open('../settings.json', 'w') as settingsFile:
+                json.dump(settings, settingsFile)

@@ -23,17 +23,16 @@ class Ui_Structure:
         self.lightController.setNotifier(self.notifier)
         self.device = DeviceInitializer(self.notifier)
         self.currentPaletteId = 0
-        self.darkMode = True
         with ui.row().style('width: 100%; display: flex;justify-content: space-between;align-items: flex-start;'):
             with ui.expansion(text='Colors', icon='palette').style('width: 30%;position: sticky;top: 0;'):
                 pass
                 with ui.tabs() as tabs:
-                    ui.tab(name='Edit pallete', icon='brush')
-                    ui.tab(name='Choose pallete', icon='table_rows').on('click', lambda: ui.open(f'#{self.currentPaletteId + 47}'))     # + 47, to skip every html element with an id which is not a color palette
-                with ui.tab_panels(tabs=tabs, value='Choose pallete'):
-                    with ui.tab_panel(name='Edit pallete'):
+                    ui.tab(name='Edit palette', icon='brush')
+                    ui.tab(name='Choose palette', icon='table_rows').on('click', lambda: ui.open(f'#{self.currentPaletteId + 47}'))     # + 47, to skip every html element with an id which is not a color palette
+                with ui.tab_panels(tabs=tabs, value='Choose palette'):
+                    with ui.tab_panel(name='Edit palette'):
                         self.loadPaletteEditor()
-                    with ui.tab_panel(name='Choose pallete'):
+                    with ui.tab_panel(name='Choose palette'):
                         self.loadPalettes()
             with ui.expansion(text='Effects', icon='auto_awesome').style('width: 30%;position: sticky;top: 0;'):
                 self.effectButtons = Ui_EffectButtons(self.eventHandler)
@@ -65,7 +64,7 @@ class Ui_Structure:
                                 ui.button('Language', on_click=dialog.open).props('icon=language').style('margin-top: 5%;')
                                 with ui.dialog().props('persistent') as dialog, ui.card():
                                     ui.label(text='Appearance:')
-                                    ui.select({1: 'Light mode', 2: 'Dark mode'}, value=2 if self.darkMode else 1, on_change=self.toggleDarkMode)
+                                    ui.select({1: 'Light mode', 2: 'Dark mode'}, value=2 if Settings.getValue("dark_mode") else 1, on_change=self.setColorMode)
                                     ui.color_input(label='Accent color', value=Settings.getValue("accent_color"), on_change=lambda e: self.setAccentColor(e.value))
                                     ui.button(text='Close', on_click=dialog.close)
                                 ui.button(text='Appearance', on_click=dialog.open).props('icon=dark_mode')
@@ -154,25 +153,30 @@ class Ui_Structure:
             self.auth_tokenInput.set_value(auth_token)
             self.connect()
 
-    def updateColor(self):
+    async def updateColor(self):
         ui.colors(primary=Settings.getValue("accent_color"))
+        await self.setColorMode(False)
 
-    def setAccentColor(self, color):
+    @staticmethod
+    def setAccentColor(color):
         Settings.setValue("accent_color", color)
         ui.colors(primary=color)
 
-    async def toggleDarkMode(self):
-        if self.darkMode:
-            self.darkMode = False
-            await ui.run_javascript('''
-                Quasar.Dark.set(false);
-                tailwind.config.darkMode = "class"
-                document.body.classList.remove("dark");
-            ''', respond=False)
-        else:
-            self.darkMode = True
+    @staticmethod
+    async def setColorMode(toggle=True):
+        darkMode = Settings.getValue("dark_mode")
+        if toggle:
+            darkMode = not darkMode
+            Settings.setValue("dark_mode", darkMode)
+        if darkMode:
             await ui.run_javascript('''
                 Quasar.Dark.set(true);
                 tailwind.config.darkMode = "class";
                 document.body.classList.add("dark");
+            ''', respond=False)
+        else:
+            await ui.run_javascript('''
+                Quasar.Dark.set(false);
+                tailwind.config.darkMode = "class"
+                document.body.classList.remove("dark");
             ''', respond=False)

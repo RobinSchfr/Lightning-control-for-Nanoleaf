@@ -8,7 +8,7 @@ class Settings:
             settings = json.load(settingsFile)
         settings[key] = value
         with open('../settings.json', 'w') as settingsFile:
-            json.dump(settings, settingsFile)
+            json.dump(settings, settingsFile, indent=4)
 
     @staticmethod
     def getValue(key):
@@ -23,4 +23,4 @@ class Settings:
         except FileNotFoundError:
             settings = {"ip": None, "auth_token": None, "dark_mode": True, "accent_color": "#4500db", "language": "english"}
             with open('../settings.json', 'w') as settingsFile:
-                json.dump(settings, settingsFile)
+                json.dump(settings, settingsFile, indent=4)

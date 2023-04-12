@@ -1,13 +1,11 @@
-from dotenv import load_dotenv
 from nanoleafapi import *
+from src.settings import Settings
 import json
-import os
 import requests
 
 
-load_dotenv()
-ip = os.getenv('IP')
-auth_token = os.getenv('AUTH_TOKEN')
+ip = Settings.getValue('ip')
+auth_token = Settings.getValue('auth_token')
 nl = Nanoleaf(ip, auth_token)
 
 

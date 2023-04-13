@@ -20,13 +20,13 @@ class Ui_AnnotatedSlider:
                 self.effectFactory.mainColorProb = self.slider.value
                 self.effectFactory.buildEffect()
             case 'Evolution Speed:':
-                self.effectFactory.evolutionSpeed = self.slider.value
+                self.effectFactory.evolutionSpeed = self.slider.value * 0.05
                 self.effectFactory.buildEffect()
             case 'Scale:':
-                self.effectFactory.scale = self.slider.value
+                self.effectFactory.scale = self.slider.value * 0.05
                 self.effectFactory.buildEffect()
             case 'Stretch:':
-                self.effectFactory.stretch = self.slider.value
+                self.effectFactory.stretch = self.slider.value * 0.1
                 self.effectFactory.buildEffect()
             case 'n Colors per frame:':
                 self.effectFactory.nColorsPerFrame = self.slider.value

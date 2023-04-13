@@ -20,9 +20,9 @@ class EffectFactory:
         self.transTime = 10
         self.linDirection = 'right'
         self.mainColorProb = 50
-        self.evolutionSpeed = 50
-        self.scale = 50
-        self.stretch = 50
+        self.evolutionSpeed = 2.5
+        self.scale = 2.5
+        self.stretch = 10
         self.nColorsPerFrame = 2
         self.propValues = None
         self.updatePropValues()

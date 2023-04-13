@@ -80,7 +80,7 @@ In the user interface (powered by NiceGUI) you have the agony of choice about 10
 2. Device setup
 
 	Go to `Settings` > `System settings` > `Developer options`
-	1. Click `Get IP from device`
+	1. Click `Get IP from device` (This may take up to 2 minutes.)
 	2. Click `Create token`
 	3. Click `Connect`
 

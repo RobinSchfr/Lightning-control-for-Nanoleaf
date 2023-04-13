@@ -70,8 +70,8 @@ class Ui_Structure:
                                 ui.button(text='Appearance', on_click=dialog.open).props('icon=dark_mode')
                                 ui.link(text='GitHub', target='https://github.com/RobinSchfr/Lightning-control-for-Nanoleaf', new_tab=True)
                                 with ui.dialog().props('persistent') as dialog, ui.card():
-                                    self.ipInput = ui.input(label='IP address')
-                                    self.auth_tokenInput = ui.input(label='auth_token', password=True, password_toggle_button=True)
+                                    self.ipInput = ui.input(label='IP address', on_change=lambda e: self.device.setIP(e.value))
+                                    self.auth_tokenInput = ui.input(label='auth_token', password=True, password_toggle_button=True, on_change=lambda e: self.device.setAuthToken(e.value))
                                     ui.button(text='Get IP from device', on_click=self.getIPFromDevice).props('icon=add')
                                     ui.button(text='Create token', on_click=self.createAuthToken).props('icon=add')
                                     ui.button(text='Connect', on_click=self.connect).props('icon=link')

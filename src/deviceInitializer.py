@@ -11,7 +11,6 @@ class DeviceInitializer:
         self.notifier = notifier
 
     def getIPFromDevice(self):
-        # self.notifier.notify(message='Please wait. This may take up to 2 minutes.', type='info')
         localIP = socket.gethostbyname(socket.gethostname())
         localIP = localIP[:localIP.rfind('.') - len(localIP) + 1]
         for i in range(255):
@@ -25,6 +24,12 @@ class DeviceInitializer:
             except Exception:
                 pass
         self.notifier.notify(message='Device not found. Please try again later.', type='negative')
+
+    def setIP(self, ip):
+        self.ip = ip
+
+    def setAuthToken(self, token):
+        self.auth_token = token
 
     async def createAuthToken(self):
         dialog = Ui_DeviceInitializerDialog()

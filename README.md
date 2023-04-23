@@ -97,8 +97,9 @@ It might not work properly on *Nanoleaf Lines*, *Nanoleaf Canvas* or *Nanoleaf L
 - [ ] Refactoring for better readability of the codebase
 - [x] embed the tools into the ui
 - [ ] create executable with pyInstaller (first beta release)
-- [ ] option to save color palettes
 - [ ] shortcuts for color + effect combinations
+- [ ] option to save color palettes
+- [ ] option to create snapshots (save all effects from device) and to upload effects on a device
 - [ ] schedule: change palette/effect automatically after specific amount of time
 - [ ] create lightshows (collection of effects → next effect on a specific timestamp of a song)
 - [ ] philips hue integration

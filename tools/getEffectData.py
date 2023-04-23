@@ -1,11 +1,10 @@
 from nanoleafapi import *
-from src.settings import Settings
 import json
 import requests
 
 
-ip = Settings.getValue('ip')
-auth_token = Settings.getValue('auth_token')
+ip = 'ip'
+auth_token = 'auth_token'
 nl = Nanoleaf(ip, auth_token)
 
 

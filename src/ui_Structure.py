@@ -25,7 +25,6 @@ class Ui_Structure:
         self.currentPaletteId = 0
         with ui.row().style('width: 100%; display: flex;justify-content: space-between;align-items: flex-start;'):
             with ui.expansion(text='Colors', icon='palette').style('width: 30%;position: sticky;top: 0;'):
-                pass
                 with ui.tabs() as tabs:
                     ui.tab(name='Edit palette', icon='brush')
                     ui.tab(name='Choose palette', icon='table_rows').on('click', lambda: ui.open(f'#{self.currentPaletteId + 47}'))     # + 47, to skip every html element with an id which is not a color palette
@@ -50,38 +49,38 @@ class Ui_Structure:
                     ui.tab(name='Settings', icon='settings')
                 with ui.tab_panels(tabs=tabs, value='Effect options'):
                     with ui.tab_panel(name='Effect options'):
+                        with ui.expansion(text='Device settings', icon='lightbulb'):
+                            self.powerSwitch = ui.switch(text='ON/OFF', value=True, on_change=lambda e: self.lightController.setPower(e.value)).props('icon=power_settings_new').style('margin-top: 5%;')
+                            self.briSlider = Ui_AnnotatedSlider(min=0, max=100, value=100, description='Brightness:', lightController=self.lightController)
                         self.effectOptionsTab = Ui_EffectOptionsTab(self.eventHandler)
                         self.eventHandler.setEffectOptionsTab(self.effectOptionsTab)
                     with ui.tab_panel(name='Settings'):
-                        self.powerSwitch = ui.switch(text='ON/OFF', value=True, on_change=lambda e: self.lightController.setPower(e.value)).props('icon=power_settings_new')
-                        self.briSlider = Ui_AnnotatedSlider(min=0, max=100, value=100, description='Brightness:', lightController=self.lightController)
-                        with ui.expansion(text='System settings', icon='settings').style('margin-top: 10%;'):
-                            with ui.column():
-                                with ui.dialog().props('persistent') as dialog, ui.card():
-                                    ui.label(text='Language:')
-                                    ui.select(['English', 'German'], value='English')
-                                    ui.button(text='Close', on_click=dialog.close)
-                                ui.button('Language', on_click=dialog.open).props('icon=language').style('margin-top: 5%;')
-                                with ui.dialog().props('persistent') as dialog, ui.card():
-                                    ui.label(text='Appearance:')
-                                    ui.select({1: 'Light mode', 2: 'Dark mode'}, value=2 if Settings.getValue("dark_mode") else 1, on_change=self.setColorMode)
-                                    ui.color_input(label='Accent color', value=Settings.getValue("accent_color"), on_change=lambda e: self.setAccentColor(e.value))
-                                    ui.button(text='Close', on_click=dialog.close)
-                                ui.button(text='Appearance', on_click=dialog.open).props('icon=dark_mode')
-                                ui.link(text='GitHub', target='https://github.com/RobinSchfr/Lightning-control-for-Nanoleaf', new_tab=True)
-                                with ui.dialog().props('persistent') as dialog, ui.card():
-                                    self.ipInput = ui.input(label='IP address', on_change=lambda e: self.device.setIP(e.value))
-                                    self.auth_tokenInput = ui.input(label='auth_token', password=True, password_toggle_button=True, on_change=lambda e: self.device.setAuthToken(e.value))
-                                    ui.button(text='Get IP from device', on_click=self.getIPFromDevice).props('icon=add')
-                                    ui.button(text='Create token', on_click=self.createAuthToken).props('icon=add')
-                                    ui.button(text='Connect', on_click=self.connect).props('icon=link')
-                                    ui.separator().style('margin-top: 5%')
-                                    ui.button(text='Identify', on_click=self.lightController.identify)
-                                    ui.button(text='Close', on_click=dialog.close)
-                                ui.button(text='Developer options', on_click=dialog.open).props('icon=build color=red').style('margin-top: 15%;')
+                        with ui.column():
+                            with ui.dialog().props('persistent') as dialog, ui.card():
+                                ui.label(text='Language:')
+                                ui.select(['English', 'German'], value='English')
+                                ui.button(text='Close', on_click=dialog.close)
+                            ui.button('Language', on_click=dialog.open).props('icon=language').style('margin-top: 5%;')
+                            with ui.dialog().props('persistent') as dialog, ui.card():
+                                ui.label(text='Appearance:')
+                                ui.select({1: 'Light mode', 2: 'Dark mode'}, value=2 if Settings.getValue("dark_mode") else 1, on_change=self.setColorMode)
+                                ui.color_input(label='Accent color', value=Settings.getValue("accent_color"), on_change=lambda e: self.setAccentColor(e.value))
+                                ui.button(text='Close', on_click=dialog.close)
+                            ui.button(text='Appearance', on_click=dialog.open).props('icon=light_mode')
+                            ui.link(text='GitHub', target='https://github.com/RobinSchfr/Lightning-control-for-Nanoleaf', new_tab=True)
+                            with ui.dialog().props('persistent') as dialog, ui.card():
+                                self.ipInput = ui.input(label='IP address', on_change=lambda e: self.device.setIP(e.value))
+                                self.auth_tokenInput = ui.input(label='auth_token', password=True, password_toggle_button=True, on_change=lambda e: self.device.setAuthToken(e.value))
+                                ui.button(text='Get IP from device', on_click=self.getIPFromDevice).props('icon=add')
+                                ui.button(text='Create token', on_click=self.createAuthToken).props('icon=add')
+                                ui.button(text='Connect', on_click=self.connect).props('icon=link')
+                                ui.separator().style('margin-top: 5%')
+                                ui.button(text='Identify', on_click=self.lightController.identify)
+                                ui.button(text='Close', on_click=dialog.close)
+                            ui.button(text='Developer options', on_click=dialog.open).props('icon=build color=red').style('margin-top: 15%;')
         self.editPalette.addColor()
+        app.on_connect(lambda: self.updateValues())
         self.loadCredentials()
-        app.on_connect(lambda: self.updateColor())
         ui.run(title='Lightning control for Nanoleaf - by Robin Schäfer', favicon='https://play-lh.googleusercontent.com/2WXa6Cwbvfrd6R1vvByeoQD5qa7zOr8g33vwxL-aPPRd9cIxZWNDqfUJQcRToz6A9Q', reload=False, dark=Settings.getValue("dark_mode"))
 
     def loadPalettes(self):
@@ -153,7 +152,10 @@ class Ui_Structure:
             self.auth_tokenInput.set_value(auth_token)
             self.connect()
 
-    async def updateColor(self):
+    async def updateValues(self):
+        if self.lightController.isDeviceConnected():
+            self.powerSwitch.set_value(self.lightController.getPower())
+            self.briSlider.slider.set_value(self.lightController.getBrightness())
         ui.colors(primary=Settings.getValue("accent_color"))
         await self.setColorMode(False)
 

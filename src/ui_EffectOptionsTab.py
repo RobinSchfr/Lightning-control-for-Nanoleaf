@@ -9,7 +9,7 @@ class Ui_EffectOptionsTab:
     def __init__(self, eventHandler):
         self.eventHandler = eventHandler
         self.effectFactory = self.eventHandler.effectFactory
-        with ui.row():
+        with ui.row().style('margin-top: 5%'):
             ui.label('Current Effect:')
             self.currentEffect = ui.label()
             ui.separator().style('margin-top: 5%')

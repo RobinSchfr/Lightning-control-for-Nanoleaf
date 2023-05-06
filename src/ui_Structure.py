@@ -95,7 +95,7 @@ class Ui_Structure:
         self.editPalette = Ui_EditPalette(self.effectFactory)
         ui.separator().style('margin-top: 5%')
         with ui.row().style('margin-top: 5%'):
-            ui.button(on_click=lambda: self.editPalette.addColor()).props('icon=add').tooltip(text='Add new color')
+            ui.button(on_click=lambda: self.editPalette.addColor()).props('icon=add').tooltip(text='Add new color (max. 10)')
             ui.button(on_click=lambda: self.editPalette.remove()).props('icon=remove').tooltip(text='Remove first color')
             ui.button(on_click=lambda: self.editPalette.clear()).props('icon=delete').tooltip(text='Clear palette')
         with ui.row().style('margin-top: 5%'):
@@ -105,17 +105,28 @@ class Ui_Structure:
             ui.button(on_click=lambda: None).props('icon=favorite').tooltip('Save this palette to favorites')
         ui.separator().style('margin-top: 5%')
         with ui.column():
-            checkbox = ui.checkbox(text='Add secondary color (50% ratio)', on_change=lambda e: self.setSecondaryColor(e.value)).style('margin-top: 5%').tooltip(text='After each color of the palette the secondary color will be added')
-            ui.color_input(label='Secondary color', value='#000000', on_change=lambda e: self.setSecondaryColor(True, e.value)).bind_visibility_from(checkbox, 'value').props('color=black')
+            secondaryColorCheckbox = ui.checkbox(text='Add secondary color (50% ratio)', on_change=lambda e: self.setSecondaryColor(e.value)).style('margin-top: 5%').tooltip(text='After each color of the palette the secondary color will be added')
+            ui.color_input(label='Secondary color', value='#000000', on_change=lambda e: self.setSecondaryColor(True, e.value)).bind_visibility_from(secondaryColorCheckbox, 'value').props('color=black')
         with ui.column():
-            checkbox2 = ui.checkbox(text='Create color shades').style('margin-top: 5%').tooltip(text='Creates 10 shades of a specific color')
-            colorInput2 = ui.color_input(label='Color', value='#000000', on_change=None).bind_visibility_from(checkbox2, 'value').props('color=black')
-            ui.button(on_click=lambda e: self.createShades(colorInput2.value)).props('icon=add').tooltip('Create palette').bind_visibility_from(checkbox2, 'value')
+            colorShadesCheckbox = ui.checkbox(text='Create color shades').style('margin-top: 5%').tooltip(text='Creates 10 shades of a specific color')
+            colorInput2 = ui.color_input(label='Color', value='#000000', on_change=None).bind_visibility_from(colorShadesCheckbox, 'value').props('color=black')
+            ui.button(on_click=lambda e: self.createShades(colorInput2.value)).props('icon=add').tooltip('Create palette').bind_visibility_from(colorShadesCheckbox, 'value')
+        with ui.column():
+            spectralColorCheckbox = ui.checkbox(text='Create spectral colors (custom bri. & sat.)').style('margin-top: 5%').tooltip(text='Creates 10 spectral colors with specific brightness and saturation')
+            colorInput3 = ui.color_input(label='Color', value='#ff0000', on_change=None).bind_visibility_from(spectralColorCheckbox, 'value').props('color=black')
+            ui.button(on_click=lambda e: self.createSpectralColors(colorInput3.value)).props('icon=add').tooltip('Create palette').bind_visibility_from(spectralColorCheckbox, 'value')
 
     def createShades(self, color):
         h, s, l = colorConverter.HEXtoHSL(color)
         self.editPalette.clear(True)
         for l in range(95, 4, -10):
+            self.editPalette.addColor(colorConverter.HSLtoHEX(h, s, l), False)
+        self.editPalette.update()
+
+    def createSpectralColors(self, color):
+        h, s, l = colorConverter.HEXtoHSL(color)
+        self.editPalette.clear(True)
+        for h in range(0, 360, 36):
             self.editPalette.addColor(colorConverter.HSLtoHEX(h, s, l), False)
         self.editPalette.update()
 

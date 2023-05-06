@@ -79,8 +79,8 @@ class Ui_Structure:
                                 ui.button(text='Close', on_click=dialog.close)
                             ui.button(text='Developer options', on_click=dialog.open).props('icon=build color=red').style('margin-top: 15%;')
         self.editPalette.addColor()
-        app.on_connect(lambda: self.updateValues())
         self.loadCredentials()
+        app.on_connect(lambda: self.updateValues())
         ui.run(title='Lightning control for Nanoleaf - by Robin Schäfer', favicon='https://play-lh.googleusercontent.com/2WXa6Cwbvfrd6R1vvByeoQD5qa7zOr8g33vwxL-aPPRd9cIxZWNDqfUJQcRToz6A9Q', reload=False, dark=Settings.getValue("dark_mode"))
 
     def loadPalettes(self):

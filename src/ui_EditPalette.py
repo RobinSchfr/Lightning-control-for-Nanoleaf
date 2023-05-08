@@ -14,23 +14,20 @@ class Ui_EditPalette:
                 cb = Ui_ColorButton(color, self)
                 self.colorButtons.append(cb)
             if updateEffect:
-                self.effectFactory.colorPalette = self.getColorPalette()
-                self.effectFactory.buildEffect()
+                self.update()
 
     def clear(self, deepClear=False):
         self.container.clear()
         self.colorButtons.clear()
         if not deepClear:
             self.addColor(updateEffect=False)
-            self.effectFactory.colorPalette = self.getColorPalette()
-            self.effectFactory.buildEffect()
+            self.update()
 
     def remove(self):
         if len(self.colorButtons) > 1:
             self.colorButtons.pop(0)
             self.drawPalette()
-            self.effectFactory.colorPalette = self.getColorPalette()
-            self.effectFactory.buildEffect()
+            self.update()
 
     def shiftLeft(self, updateEffect=True):
         if len(self.colorButtons) > 1:
@@ -39,16 +36,14 @@ class Ui_EditPalette:
             self.addColor(leftColor, False)
             self.drawPalette()
             if updateEffect:
-                self.effectFactory.colorPalette = self.getColorPalette()
-                self.effectFactory.buildEffect()
+                self.update()
 
     def shiftRight(self):
         if len(self.colorButtons) > 1:
             for i in range(len(self.colorButtons) - 1):
                 self.shiftLeft(False)
             self.drawPalette()
-            self.effectFactory.colorPalette = self.getColorPalette()
-            self.effectFactory.buildEffect()
+            self.update()
 
     def drawPalette(self):
         colors = self.colorButtons.copy()
@@ -62,8 +57,7 @@ class Ui_EditPalette:
         self.clear(True)
         for color in palette:
             self.addColor(color, False)
-        self.effectFactory.colorPalette = self.getColorPalette()
-        self.effectFactory.buildEffect()
+        self.update()
 
     def update(self):
         self.effectFactory.colorPalette = self.getColorPalette()

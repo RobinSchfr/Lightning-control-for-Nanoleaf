@@ -1,5 +1,6 @@
 from nicegui import ui
 from ui_ColorButton import Ui_ColorButton
+import random
 
 
 class Ui_EditPalette:
@@ -57,6 +58,11 @@ class Ui_EditPalette:
         self.clear(True)
         for color in palette:
             self.addColor(color, False)
+        self.update()
+
+    def shuffleColorPalette(self):
+        random.shuffle(self.colorButtons)
+        self.drawPalette()
         self.update()
 
     def update(self):

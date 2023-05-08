@@ -4,10 +4,11 @@ from ui_Widget import Ui_Widget
 
 
 class Ui_AnnotatedSlider:
-    def __init__(self, *, min: float, max: float, step: float = 1.0, value: Optional[float] = None, description: str = '', effectFactory: Optional = None, lightController: Optional = None) -> None:
+    def __init__(self, *, min: float, max: float, step: float = 1.0, value: Optional[float] = None, description: str = '', effectFactory: Optional = None, lightController: Optional = None, checkBox: Optional = None) -> None:
         self.effectFactory = effectFactory
         self.lightController = lightController
         self.description = description
+        self.checkBox = checkBox
         with ui.row().style('margin-top: 20px;'):
             self.label = ui.label(description).style('margin-top: 20px;')
             self.slider = ui.slider(min=min, max=max, step=step, value=value, on_change=self.updateValue).style('width: 50%;margin-top: 18px;').props('label-always')
@@ -34,3 +35,4 @@ class Ui_AnnotatedSlider:
             case 'Brightness:':
                 if self.lightController is not None:
                     self.lightController.setBrightness(self.slider.value)
+                    self.checkBox.set_value(True)

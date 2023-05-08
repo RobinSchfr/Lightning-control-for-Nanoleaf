@@ -51,7 +51,7 @@ class Ui_Structure:
                     with ui.tab_panel(name='Effect options'):
                         with ui.expansion(text='Device settings', icon='lightbulb'):
                             self.powerSwitch = ui.switch(text='ON/OFF', value=True, on_change=lambda e: self.lightController.setPower(e.value)).props('icon=power_settings_new').style('margin-top: 5%;')
-                            self.briSlider = Ui_AnnotatedSlider(min=0, max=100, value=100, description='Brightness:', lightController=self.lightController)
+                            self.briSlider = Ui_AnnotatedSlider(min=0, max=100, value=0, description='Brightness:', lightController=self.lightController, checkBox=self.powerSwitch)
                         self.effectOptionsTab = Ui_EffectOptionsTab(self.eventHandler)
                         self.eventHandler.setEffectOptionsTab(self.effectOptionsTab)
                     with ui.tab_panel(name='Settings'):
@@ -165,8 +165,8 @@ class Ui_Structure:
 
     async def updateValues(self):
         if self.lightController.isDeviceConnected():
-            self.powerSwitch.set_value(self.lightController.getPower())
             self.briSlider.slider.set_value(self.lightController.getBrightness())
+            self.powerSwitch.set_value(self.lightController.getPower())
         ui.colors(primary=Settings.getValue("accent_color"))
         await self.setColorMode(False)
 

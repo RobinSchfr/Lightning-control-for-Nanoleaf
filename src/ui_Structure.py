@@ -118,8 +118,6 @@ class Ui_Structure:
             ui.button(on_click=lambda: self.editPalette.shiftLeft()).props('icon=arrow_left').tooltip(text='Shift palette one color to left')
             ui.button(on_click=lambda: self.editPalette.shiftRight()).props('icon=arrow_right').tooltip(text='Shift palette one color to right')
             ui.button(on_click=lambda: self.editPalette.shuffleColorPalette()).props('icon=shuffle').tooltip(text='Shuffle color palette')
-        with ui.row().style('margin-top: 5%'):
-            ui.button(on_click=lambda: None).props('icon=favorite').tooltip('Save this palette to favorites')
         ui.separator().style('margin-top: 5%')
         with ui.column():
             secondaryColorCheckbox = ui.checkbox(text='Add secondary color (50% ratio)', on_change=lambda e: self.setSecondaryColor(e.value)).style('margin-top: 5%').tooltip(text='After each color of the palette the secondary color will be added')

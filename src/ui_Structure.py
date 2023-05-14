@@ -43,41 +43,57 @@ class Ui_Structure:
                         self.effectButtons.loadEffects(effectType='color')
                     with ui.tab_panel(name='Sound'):
                         self.effectButtons.loadEffects(effectType='rhythm')
-            with ui.expansion(text='Options', icon='edit').style('width: 30%;position: sticky;top: 0;'):
-                with ui.tabs() as tabs:
-                    ui.tab(name='Effect options', icon='tune')
-                    ui.tab(name='Settings', icon='settings')
-                with ui.tab_panels(tabs=tabs, value='Effect options'):
-                    with ui.tab_panel(name='Effect options'):
-                        with ui.expansion(text='Device settings', icon='lightbulb'):
-                            self.powerSwitch = ui.switch(text='ON/OFF', value=True, on_change=lambda e: self.lightController.setPower(e.value)).props('icon=power_settings_new').style('margin-top: 5%;')
-                            self.briSlider = Ui_AnnotatedSlider(min=0, max=100, value=0, description='Brightness:', lightController=self.lightController, checkBox=self.powerSwitch)
-                        self.effectOptionsTab = Ui_EffectOptionsTab(self.eventHandler)
-                        self.eventHandler.setEffectOptionsTab(self.effectOptionsTab)
-                    with ui.tab_panel(name='Settings'):
-                        with ui.column():
-                            with ui.dialog().props('persistent') as dialog, ui.card():
-                                ui.label(text='Language:')
-                                ui.select(['English', 'German'], value='English')
-                                ui.button(text='Close', on_click=dialog.close)
-                            ui.button('Language', on_click=dialog.open).props('icon=language').style('margin-top: 5%;')
-                            with ui.dialog().props('persistent') as dialog, ui.card():
-                                ui.label(text='Appearance:')
-                                ui.select({1: 'Light mode', 2: 'Dark mode'}, value=2 if Settings.getValue("dark_mode") else 1, on_change=self.setColorMode)
-                                ui.color_input(label='Accent color', value=Settings.getValue("accent_color"), on_change=lambda e: self.setAccentColor(e.value))
-                                ui.button(text='Close', on_click=dialog.close)
-                            ui.button(text='Appearance', on_click=dialog.open).props('icon=light_mode')
-                            ui.link(text='GitHub', target='https://github.com/RobinSchfr/Lightning-control-for-Nanoleaf', new_tab=True)
-                            with ui.dialog().props('persistent') as dialog, ui.card():
-                                self.ipInput = ui.input(label='IP address', on_change=lambda e: self.device.setIP(e.value))
-                                self.auth_tokenInput = ui.input(label='auth_token', password=True, password_toggle_button=True, on_change=lambda e: self.device.setAuthToken(e.value))
-                                ui.button(text='Get IP from device', on_click=self.getIPFromDevice).props('icon=add')
-                                ui.button(text='Create token', on_click=self.createAuthToken).props('icon=add')
-                                ui.button(text='Connect', on_click=self.connect).props('icon=link')
-                                ui.separator().style('margin-top: 5%')
-                                ui.button(text='Identify', on_click=self.lightController.identify)
-                                ui.button(text='Close', on_click=dialog.close)
-                            ui.button(text='Developer options', on_click=dialog.open).props('icon=build color=red').style('margin-top: 15%;')
+            with ui.column().style('width: 30%;position: sticky;top: 0;'):
+                with ui.expansion(text='Options', icon='edit').style('width: 100%;top: 0;'):
+                    with ui.tabs() as tabs:
+                        ui.tab(name='Effect options', icon='tune')
+                        ui.tab(name='Settings', icon='settings')
+                    with ui.tab_panels(tabs=tabs, value='Effect options'):
+                        with ui.tab_panel(name='Effect options'):
+                            with ui.expansion(text='Device settings', icon='lightbulb'):
+                                self.powerSwitch = ui.switch(text='ON/OFF', value=True, on_change=lambda e: self.lightController.setPower(e.value)).props('icon=power_settings_new').style('margin-top: 5%;')
+                                self.briSlider = Ui_AnnotatedSlider(min=0, max=100, value=0, description='Brightness:', lightController=self.lightController, checkBox=self.powerSwitch)
+                            self.effectOptionsTab = Ui_EffectOptionsTab(self.eventHandler)
+                            self.eventHandler.setEffectOptionsTab(self.effectOptionsTab)
+                        with ui.tab_panel(name='Settings'):
+                            with ui.column():
+                                with ui.dialog().props('persistent') as dialog, ui.card():
+                                    ui.label(text='Language:')
+                                    ui.select(['English', 'German'], value='English')
+                                    ui.button(text='Close', on_click=dialog.close)
+                                ui.button('Language', on_click=dialog.open).props('icon=language').style('margin-top: 5%;')
+                                with ui.dialog().props('persistent') as dialog, ui.card():
+                                    ui.label(text='Appearance:')
+                                    ui.select({1: 'Light mode', 2: 'Dark mode'}, value=2 if Settings.getValue("dark_mode") else 1, on_change=self.setColorMode)
+                                    ui.color_input(label='Accent color', value=Settings.getValue("accent_color"), on_change=lambda e: self.setAccentColor(e.value))
+                                    ui.button(text='Close', on_click=dialog.close)
+                                ui.button(text='Appearance', on_click=dialog.open).props('icon=light_mode')
+                                ui.link(text='GitHub', target='https://github.com/RobinSchfr/Lightning-control-for-Nanoleaf', new_tab=True)
+                                with ui.dialog().props('persistent') as dialog, ui.card():
+                                    self.ipInput = ui.input(label='IP address', on_change=lambda e: self.device.setIP(e.value))
+                                    self.auth_tokenInput = ui.input(label='auth_token', password=True, password_toggle_button=True, on_change=lambda e: self.device.setAuthToken(e.value))
+                                    ui.button(text='Get IP from device', on_click=self.getIPFromDevice).props('icon=add')
+                                    ui.button(text='Create token', on_click=self.createAuthToken).props('icon=add')
+                                    ui.button(text='Connect', on_click=self.connect).props('icon=link')
+                                    ui.separator().style('margin-top: 5%')
+                                    ui.button(text='Identify', on_click=self.lightController.identify)
+                                    ui.button(text='Close', on_click=dialog.close)
+                                ui.button(text='Developer options', on_click=dialog.open).props('icon=build color=red').style('margin-top: 15%;')
+                with ui.expansion(text='Saved effects', icon='save').style('width: 100%;'):
+                    ui.select({1: 'Device 1', 2: 'Device 2', 3: 'Device 3'}, value=1)
+                    with ui.row().style('margin-top: 5%'):
+                        ui.label(text='Effects stored on selected device: ').style('margin-top: 2%')
+                        ui.circular_progress(max=50)
+                    with ui.tabs().style('margin-top: 5%') as tabs:
+                        ui.tab(name='Effect shortcuts', icon='bookmark')
+                        ui.tab(name='Snapshot manager', icon='storage')
+                    with ui.tab_panels(tabs=tabs, value='Effect shortcuts'):
+                        with ui.tab_panel(name='Effect shortcuts'):
+                            ui.button(text='Save current effect', on_click=None).props('icon=done').tooltip(text='Saves current effect as a shortcut (not on device)')
+                            ui.separator().style('margin-top: 5%')
+                        with ui.tab_panel(name='Snapshot manager'):
+                            ui.button(text='Create snapshot', on_click=None).props('icon=create_new_folder').tooltip(text='Saves all local effects from a device')
+                            ui.separator().style('margin-top: 5%')
         self.editPalette.addColor()
         self.loadCredentials()
         app.on_connect(lambda: self.updateValues())

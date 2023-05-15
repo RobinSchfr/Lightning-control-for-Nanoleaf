@@ -11,6 +11,7 @@ from ui_EffectOptionsTab import Ui_EffectOptionsTab
 from ui_Notifier import Notifier
 from ui_Palette import Ui_Palette
 import colorConverter
+import matplotlib
 
 
 class Ui_Structure:
@@ -130,6 +131,9 @@ class Ui_Structure:
             colorInput2 = ui.color_input(label='Color', value='#000000', on_change=None).bind_visibility_from(colorShadesCheckbox, 'value').props('color=black')
             ui.button(on_click=lambda e: self.createShades(colorInput2.value)).props('icon=add').tooltip('Create palette').bind_visibility_from(colorShadesCheckbox, 'value')
         with ui.column():
+            colorGradientShadesCheckbox = ui.checkbox(text='Create gradient colors based on multiple input colors (less is more)').style('margin-top: 5%').tooltip(text='Creates 10 gradient shades of given colors (less is more)')
+            ui.button(on_click=lambda e: self.createGradientShades()).props('icon=add').tooltip('Create palette').bind_visibility_from(colorGradientShadesCheckbox, 'value')
+        with ui.column():
             spectralColorCheckbox = ui.checkbox(text='Create spectral colors (custom bri. & sat.)').style('margin-top: 5%').tooltip(text='Creates 10 spectral colors with specific brightness and saturation')
             colorInput3 = ui.color_input(label='Color', value='#ff0000', on_change=None).bind_visibility_from(spectralColorCheckbox, 'value').props('color=black')
             ui.button(on_click=lambda e: self.createSpectralColors(colorInput3.value)).props('icon=add').tooltip('Create palette').bind_visibility_from(spectralColorCheckbox, 'value')
@@ -140,6 +144,15 @@ class Ui_Structure:
         for l in range(95, 4, -10):
             self.editPalette.addColor(colorConverter.HSLtoHEX(h, s, l), False)
         self.editPalette.update()
+
+    def createGradientShades(self):
+        if len(self.editPalette.getColorPalette()) < 2:
+            return
+        colormap = matplotlib.colors.LinearSegmentedColormap.from_list(None, self.editPalette.getColorPalette())
+        palette = []
+        for i in range(5, 96, 10):
+            palette.append(matplotlib.colors.rgb2hex(colormap(i * 0.01)))
+        self.editPalette.loadPalette(palette)
 
     def createSpectralColors(self, color):
         h, s, l = colorConverter.HEXtoHSL(color)

@@ -98,7 +98,7 @@ It might not work properly on *Nanoleaf Lines*, *Nanoleaf Canvas* or *Nanoleaf L
 ## Roadmap
 - [x] feature "create color Shades"
 - [x] feature "add secondary color" to a palette
-- [ ] feature create gradient palette based on colors
+- [x] feature create gradient palette based on colors
 - [ ] Refactoring for better readability of the codebase
 - [x] embed the tools into the ui
 - [ ] create executable with pyInstaller (first beta release)

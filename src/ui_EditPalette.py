@@ -61,9 +61,10 @@ class Ui_EditPalette:
         self.update()
 
     def shuffleColorPalette(self):
-        random.shuffle(self.colorButtons)
-        self.drawPalette()
-        self.update()
+        if len(self.colorButtons) > 1:
+            random.shuffle(self.colorButtons)
+            self.drawPalette()
+            self.update()
 
     def update(self):
         self.effectFactory.colorPalette = self.getColorPalette()

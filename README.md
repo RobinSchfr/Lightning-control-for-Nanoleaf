@@ -84,7 +84,11 @@ In the user interface (powered by NiceGUI) you have the agony of choice about 10
 	2. Click `Create token`
 	3. Click `Connect`
 
-#### Now you are ready to go!
+> Now you are ready to go!
+
+#### Native mode
+You have the option to change from browser mode (*default*) to native mode. In the native mode the app has a dedicated window.
+To enable native mode go to `settings.json` file and set `native_mode` to `true`.
 
 ## Compatibility
 The software especially the unit which creates the effects is only tested on *Nanoleaf Shapes*.

@@ -27,7 +27,7 @@ class Ui_Structure:
             with ui.expansion(text='Colors', icon='palette').style('width: 30%;position: sticky;top: 0;'):
                 with ui.tabs() as tabs:
                     ui.tab(name='Edit palette', icon='brush')
-                    ui.tab(name='Choose palette', icon='table_rows').on('click', lambda: ui.open(f'#{self.currentPaletteId + 47}'))     # + 47, to skip every html element with an id which is not a color palette
+                    ui.tab(name='Choose palette', icon='table_rows').on('click', lambda: ui.open(f'#{self.currentPaletteId + 55}'))     # + 55, to skip every html element with an id which is not a color palette
                 with ui.tab_panels(tabs=tabs, value='Choose palette'):
                     with ui.tab_panel(name='Edit palette'):
                         self.loadPaletteEditor()
@@ -97,7 +97,10 @@ class Ui_Structure:
         self.editPalette.addColor()
         self.loadCredentials()
         app.on_connect(lambda: self.updateValues())
-        ui.run(title='Lightning control for Nanoleaf - by Robin Schäfer', favicon='https://play-lh.googleusercontent.com/2WXa6Cwbvfrd6R1vvByeoQD5qa7zOr8g33vwxL-aPPRd9cIxZWNDqfUJQcRToz6A9Q', reload=False, dark=Settings.getValue("dark_mode"))
+        app.native.window_args['zoomable'] = True
+        app.native.window_args['confirm_close'] = True
+        app.native.window_args['min_size'] = (900, 550)
+        ui.run(title='Lightning control for Nanoleaf - by Robin Schäfer', favicon='https://play-lh.googleusercontent.com/2WXa6Cwbvfrd6R1vvByeoQD5qa7zOr8g33vwxL-aPPRd9cIxZWNDqfUJQcRToz6A9Q', reload=False, dark=Settings.getValue("dark_mode"), window_size=(1600, 900) if Settings.getValue("native_mode") else None)
 
     def loadPalettes(self):
         ui.add_head_html('''<style>.palette:hover{border: 4px solid #000; box-sizing: border-box;}</style>''')

@@ -335,3 +335,4 @@ $RECYCLE.BIN/
 # End of https://www.toptal.com/developers/gitignore/api/python,windows,pycharm,visualstudiocode
 
 src/settings.json
+src/effects.json

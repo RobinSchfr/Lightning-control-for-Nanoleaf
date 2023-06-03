@@ -1,3 +1,4 @@
+from filemanager import Filemanager, File
 import colorConverter
 import copy
 
@@ -59,3 +60,4 @@ class EffectFactory:
                 effectJson['write']['pluginOptions'].append({"name": prop, "value": self.propValues[prop]})
             effectString = str(effectJson).replace('\'', '\"')
             self.lightController.setEffect(effectString)
+            Filemanager.setValue(File.EFFECTS, "current_effect", effectJson)

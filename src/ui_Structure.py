@@ -3,7 +3,8 @@ from deviceInitializer import DeviceInitializer
 from effectFactory import EffectFactory
 from eventHandler import EventHandler
 from nicegui import ui, app
-from settings import Settings
+from filemanager import Filemanager, File
+from uiInitilalizer import UiInitilalizer
 from ui_AnnotatedSlider import Ui_AnnotatedSlider
 from ui_EditPalette import Ui_EditPalette
 from ui_EffectButtons import Ui_EffectButtons
@@ -16,6 +17,8 @@ import matplotlib
 
 class Ui_Structure:
     def __init__(self, light):
+        self.secondaryColorInput = None
+        self.secondaryColorCheckbox = None
         self.eventHandler = EventHandler()
         self.effectFactory = None
         self.editPalette = None
@@ -65,8 +68,8 @@ class Ui_Structure:
                                 ui.button('Language', on_click=dialog.open).props('icon=language').style('margin-top: 5%;')
                                 with ui.dialog().props('persistent') as dialog, ui.card():
                                     ui.label(text='Appearance:')
-                                    ui.select({1: 'Light mode', 2: 'Dark mode'}, value=2 if Settings.getValue("dark_mode") else 1, on_change=self.setColorMode)
-                                    ui.color_input(label='Accent color', value=Settings.getValue("accent_color"), on_change=lambda e: self.setAccentColor(e.value))
+                                    ui.select({1: 'Light mode', 2: 'Dark mode'}, value=2 if Filemanager.getValue(File.SETTINGS, "dark_mode") else 1, on_change=self.setColorMode)
+                                    ui.color_input(label='Accent color', value=Filemanager.getValue(File.SETTINGS, "accent_color"), on_change=lambda e: self.setAccentColor(e.value))
                                     ui.button(text='Close', on_click=dialog.close)
                                 ui.button(text='Appearance', on_click=dialog.open).props('icon=light_mode')
                                 ui.link(text='GitHub', target='https://github.com/RobinSchfr/Lightning-control-for-Nanoleaf', new_tab=True)
@@ -95,13 +98,14 @@ class Ui_Structure:
                         with ui.tab_panel(name='Snapshot manager'):
                             ui.button(text='Create snapshot', on_click=None).props('icon=create_new_folder').tooltip(text='Saves all local effects from a device')
                             ui.separator().style('margin-top: 5%')
-        self.editPalette.addColor()
+        # self.editPalette.addColor()
         self.loadCredentials()
         app.on_connect(lambda: self.updateValues())
+        self.uiInitializer = UiInitilalizer(self.effectOptionsTab, self.editPalette, self.secondaryColorCheckbox, self.secondaryColorInput)
         app.native.window_args['zoomable'] = True
         app.native.window_args['confirm_close'] = True
         app.native.window_args['min_size'] = (900, 550)
-        ui.run(title='Lightning control for Nanoleaf - by Robin Schäfer', favicon='https://play-lh.googleusercontent.com/2WXa6Cwbvfrd6R1vvByeoQD5qa7zOr8g33vwxL-aPPRd9cIxZWNDqfUJQcRToz6A9Q', reload=False, dark=Settings.getValue("dark_mode"), window_size=(1600, 900) if Settings.getValue("native_mode") else None)
+        ui.run(title='Lightning control for Nanoleaf - by Robin Schäfer', favicon='https://play-lh.googleusercontent.com/2WXa6Cwbvfrd6R1vvByeoQD5qa7zOr8g33vwxL-aPPRd9cIxZWNDqfUJQcRToz6A9Q', reload=False, dark=Filemanager.getValue(File.SETTINGS, "dark_mode"), window_size=(1600, 900) if Filemanager.getValue(File.SETTINGS, "native_mode") else None)
 
     def loadPalettes(self):
         ui.add_head_html('''<style>.palette:hover{border: 4px solid #000; box-sizing: border-box;}</style>''')
@@ -124,8 +128,8 @@ class Ui_Structure:
             ui.button(on_click=lambda: self.editPalette.shuffleColorPalette()).props('icon=shuffle').tooltip(text='Shuffle color palette')
         ui.separator().style('margin-top: 5%')
         with ui.column():
-            secondaryColorCheckbox = ui.checkbox(text='Add secondary color (50% ratio)', on_change=lambda e: self.setSecondaryColor(e.value)).style('margin-top: 5%').tooltip(text='After each color of the palette the secondary color will be added')
-            ui.color_input(label='Secondary color', value='#000000', on_change=lambda e: self.setSecondaryColor(True, e.value)).bind_visibility_from(secondaryColorCheckbox, 'value').props('color=black')
+            self.secondaryColorCheckbox = ui.checkbox(text='Add secondary color (50% ratio)', on_change=lambda e: self.setSecondaryColor(e.value)).style('margin-top: 5%').tooltip(text='After each color of the palette the secondary color will be added')
+            self.secondaryColorInput = ui.color_input(label='Secondary color', value='#000000', on_change=lambda e: self.setSecondaryColor(True, e.value)).bind_visibility_from(self.secondaryColorCheckbox, 'value').props('color=black')
         with ui.column():
             colorShadesCheckbox = ui.checkbox(text='Create color shades').style('margin-top: 5%').tooltip(text='Creates 10 shades of a specific color')
             colorInput2 = ui.color_input(label='Color', value='#000000', on_change=None).bind_visibility_from(colorShadesCheckbox, 'value').props('color=black')
@@ -182,13 +186,13 @@ class Ui_Structure:
         except Exception:
             self.notifier.notify(message='Can\'t connect.', type='negative')
         else:
-            Settings.setValue("ip", self.ipInput.value)
-            Settings.setValue("auth_token", self.auth_tokenInput.value)
+            Filemanager.setValue(File.SETTINGS, "ip", self.ipInput.value)
+            Filemanager.setValue(File.SETTINGS, "auth_token", self.auth_tokenInput.value)
             self.notifier.notify(message='Device connected.', type='positive')
 
     def loadCredentials(self):
-        ip = Settings.getValue("ip")
-        auth_token = Settings.getValue("auth_token")
+        ip = Filemanager.getValue(File.SETTINGS, "ip")
+        auth_token = Filemanager.getValue(File.SETTINGS, "auth_token")
         if ip is not None and auth_token is not None:
             self.ipInput.set_value(ip)
             self.auth_tokenInput.set_value(auth_token)
@@ -198,20 +202,20 @@ class Ui_Structure:
         if self.lightController.isDeviceConnected():
             self.briSlider.slider.set_value(self.lightController.getBrightness())
             self.powerSwitch.set_value(self.lightController.getPower())
-        ui.colors(primary=Settings.getValue("accent_color"))
+        ui.colors(primary=Filemanager.getValue(File.SETTINGS, "accent_color"))
         await self.setColorMode(False)
 
     @staticmethod
     def setAccentColor(color):
-        Settings.setValue("accent_color", color)
+        Filemanager.setValue(File.SETTINGS, "accent_color", color)
         ui.colors(primary=color)
 
     @staticmethod
     async def setColorMode(toggle=True):
-        darkMode = Settings.getValue("dark_mode")
+        darkMode = Filemanager.getValue(File.SETTINGS, "dark_mode")
         if toggle:
             darkMode = not darkMode
-            Settings.setValue("dark_mode", darkMode)
+            Filemanager.setValue(File.SETTINGS, "dark_mode", darkMode)
         if darkMode:
             await ui.run_javascript('''
                 Quasar.Dark.set(true);

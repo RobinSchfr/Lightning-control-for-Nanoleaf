@@ -30,3 +30,9 @@ class Ui_DoubleSlider:
         else:
             self.effectFactory.transTime = self.v.getValue() * 10
         self.effectFactory.buildEffect()
+
+    def setBigValSlider(self, value):
+        self.bigValSlider.set_value(value)
+
+    def setSmallValSlider(self, value):
+        self.smallValSlider.set_value(value)

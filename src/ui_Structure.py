@@ -98,7 +98,6 @@ class Ui_Structure:
                         with ui.tab_panel(name='Snapshot manager'):
                             ui.button(text='Create snapshot', on_click=None).props('icon=create_new_folder').tooltip(text='Saves all local effects from a device')
                             ui.separator().style('margin-top: 5%')
-        # self.editPalette.addColor()
         self.loadCredentials()
         app.on_connect(lambda: self.updateValues())
         self.uiInitializer = UiInitilalizer(self.effectOptionsTab, self.editPalette, self.secondaryColorCheckbox, self.secondaryColorInput)

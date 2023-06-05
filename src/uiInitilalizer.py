@@ -11,6 +11,8 @@ class UiInitilalizer:
         currentEffect = Filemanager.getValue(File.EFFECTS, "current_effect")
         if currentEffect is not None:
             self.loadUI(currentEffect)
+        else:
+            self.editPalette.addColor()
 
     def loadUI(self, effect):
         palette = self.getColors(effect)

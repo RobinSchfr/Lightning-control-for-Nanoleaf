@@ -27,6 +27,7 @@ class Ui_Structure:
         self.lightController.setNotifier(self.notifier)
         self.device = DeviceInitializer(self.notifier)
         self.currentPaletteId = 0
+        self.darkMode = ui.dark_mode()
         with ui.row().style('width: 100%; display: flex;justify-content: space-between;align-items: flex-start;'):
             with ui.expansion(text='Colors', icon='palette').style('width: 30%;position: sticky;top: 0;'):
                 with ui.tabs() as tabs:
@@ -68,7 +69,7 @@ class Ui_Structure:
                                 ui.button('Language', on_click=dialog.open).props('icon=language').style('margin-top: 5%;')
                                 with ui.dialog().props('persistent') as dialog, ui.card():
                                     ui.label(text='Appearance:')
-                                    ui.select({1: 'Light mode', 2: 'Dark mode'}, value=2 if Filemanager.getValue(File.SETTINGS, "dark_mode") else 1, on_change=self.setColorMode)
+                                    ui.select({1: 'Light mode', 2: 'Dark mode'}, value=2 if Filemanager.getValue(File.SETTINGS, "dark_mode") else 1, on_change=self.setDarkMode)
                                     ui.color_input(label='Accent color', value=Filemanager.getValue(File.SETTINGS, "accent_color"), on_change=lambda e: self.setAccentColor(e.value))
                                     ui.button(text='Close', on_click=dialog.close)
                                 ui.button(text='Appearance', on_click=dialog.open).props('icon=light_mode')
@@ -131,14 +132,14 @@ class Ui_Structure:
             self.secondaryColorInput = ui.color_input(label='Secondary color', value='#000000', on_change=lambda e: self.setSecondaryColor(True, e.value)).bind_visibility_from(self.secondaryColorCheckbox, 'value').props('color=black')
         with ui.column():
             colorShadesCheckbox = ui.checkbox(text='Create color shades').style('margin-top: 5%').tooltip(text='Creates 10 shades of a specific color')
-            colorInput2 = ui.color_input(label='Color', value='#000000', on_change=None).bind_visibility_from(colorShadesCheckbox, 'value').props('color=black')
+            colorInput2 = ui.color_input(label='Color', value='#000000').bind_visibility_from(colorShadesCheckbox, 'value').props('color=black')
             ui.button(on_click=lambda e: self.createShades(colorInput2.value)).props('icon=add').tooltip('Create palette').bind_visibility_from(colorShadesCheckbox, 'value')
         with ui.column():
             colorGradientShadesCheckbox = ui.checkbox(text='Create gradient colors based on multiple input colors (less is more)').style('margin-top: 5%').tooltip(text='Creates 10 gradient shades of given colors (less is more)')
             ui.button(on_click=lambda e: self.createGradientShades()).props('icon=add').tooltip('Create palette').bind_visibility_from(colorGradientShadesCheckbox, 'value')
         with ui.column():
             spectralColorCheckbox = ui.checkbox(text='Create spectral colors (custom bri. & sat.)').style('margin-top: 5%').tooltip(text='Creates 10 spectral colors with specific brightness and saturation')
-            colorInput3 = ui.color_input(label='Color', value='#ff0000', on_change=None).bind_visibility_from(spectralColorCheckbox, 'value').props('color=black')
+            colorInput3 = ui.color_input(label='Color', value='#ff0000').bind_visibility_from(spectralColorCheckbox, 'value').props('color=black')
             ui.button(on_click=lambda e: self.createSpectralColors(colorInput3.value)).props('icon=add').tooltip('Create palette').bind_visibility_from(spectralColorCheckbox, 'value')
 
     def createShades(self, color):
@@ -202,28 +203,19 @@ class Ui_Structure:
             self.briSlider.slider.set_value(self.lightController.getBrightness())
             self.powerSwitch.set_value(self.lightController.getPower())
         ui.colors(primary=Filemanager.getValue(File.SETTINGS, "accent_color"))
-        await self.setColorMode(False)
+        self.setDarkMode(False)
 
     @staticmethod
     def setAccentColor(color):
         Filemanager.setValue(File.SETTINGS, "accent_color", color)
         ui.colors(primary=color)
 
-    @staticmethod
-    async def setColorMode(toggle=True):
+    def setDarkMode(self, toggle=True):
         darkMode = Filemanager.getValue(File.SETTINGS, "dark_mode")
         if toggle:
             darkMode = not darkMode
             Filemanager.setValue(File.SETTINGS, "dark_mode", darkMode)
         if darkMode:
-            await ui.run_javascript('''
-                Quasar.Dark.set(true);
-                tailwind.config.darkMode = "class";
-                document.body.classList.add("dark");
-            ''', respond=False)
+            self.darkMode.enable()
         else:
-            await ui.run_javascript('''
-                Quasar.Dark.set(false);
-                tailwind.config.darkMode = "class"
-                document.body.classList.remove("dark");
-            ''', respond=False)
+            self.darkMode.disable()

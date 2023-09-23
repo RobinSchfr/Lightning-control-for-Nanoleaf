@@ -32,7 +32,7 @@ class Ui_Structure:
             with ui.expansion(text='Colors', icon='palette').style('width: 30%;position: sticky;top: 0;'):
                 with ui.tabs() as tabs:
                     ui.tab(name='Edit palette', icon='brush')
-                    ui.tab(name='Choose palette', icon='table_rows').on('click', lambda: ui.open(f'#{self.currentPaletteId + 55}'))     # + 55, to skip every html element with an id which is not a color palette
+                    ui.tab(name='Choose palette', icon='table_rows').on('click', lambda: ui.open(f'#c{self.currentPaletteId + 61}'))     # + 61, to skip every html element with an id which is not a color palette
                 with ui.tab_panels(tabs=tabs, value='Choose palette'):
                     with ui.tab_panel(name='Edit palette'):
                         self.loadPaletteEditor()

@@ -1,0 +1,8 @@
+version: 0.0.1
+components:
+  - name: Demo 1
+    source: src/main.py
+    demo_image_url: "https://raw.githubusercontent.com/RobinSchfr/Lightning-control-for-Nanoleaf/master/media/screenshot_dark.png"
+  - name: Demo 2
+    source: src/main.py
+    demo_image_url: "https://raw.githubusercontent.com/RobinSchfr/Lightning-control-for-Nanoleaf/master/media/screenshot_light.png"

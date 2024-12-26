@@ -46,7 +46,7 @@ In the user interface (powered by NiceGUI) you have the agony of choice about 10
 
 ## Setup guide
 ### I. Installation
-1. Install Python
+1. Install Python 3.11
 
 	Get it from the [official homepage](https://www.python.org/downloads/)
 
